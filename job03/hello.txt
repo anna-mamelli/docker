@@ -1,0 +1,8 @@
+Bonjour depuis mon conteneur Docker !
+
+Ce message montre que la construction de l'image a fonctionné.
+Voici ce qui vient de se passer :
+ 1. Le client Docker a contacté le démon Docker.
+ 2. Le démon a construit une image à partir d'une base Debian minimale.
+ 3. Le démon a créé un conteneur qui affiche ce texte, puis se termine.
+Ligne ajoutée.

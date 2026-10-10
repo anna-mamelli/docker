@@ -1,0 +1,36 @@
+services:
+  ftp:
+    build:
+      context: ./ftp
+      dockerfile: Dockerfile
+    container_name: tp-ftp
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"
+    environment:
+      FTP_USER: ${FTP_USER}
+      FTP_PASS: ${FTP_PASS}
+      PASV_ADDRESS: ${PASV_ADDRESS}
+    volumes:
+      - web:/var/www/html
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/21"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: tp-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - web:/usr/share/nginx/html:ro
+    depends_on:
+      ftp:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  web:
